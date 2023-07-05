@@ -3,6 +3,13 @@
 The Student Enrollment System is a database application that manages student information, course details, and enrollment records. The system allows for the registration of students, assignment of courses, and tracking of enrollment status. It provides functionalities to query and retrieve data related to student enrollments, course information, and instructor details.
 The project consists of three tables: StudentInfo, CoursesInfo, and EnrollmentInfo. The StudentInfo table stores student-related information, including student ID, name, date of birth, phone number, email address, and address. The CoursesInfo table contains course details such as course ID, course name, and course instructor name. The EnrollmentInfo table links students and courses, recording the enrollment status of each student for each course. Sample data is provided to demonstrate the functionality of the system.
 **Features**
+Store and manage student information, including ID, name, date of birth, contact details, and address.
+Maintain course details, including course ID, course name, and course instructor name.
+Track student enrollments for various courses, recording enrollment status (e.g., enrolled or not enrolled).
+Perform various queries and operations on the data, such as retrieving student information with enrollment status, fetching courses for a specific student, and obtaining course details.
+Filter data based on specific criteria, such as student name or course name.
+Calculate aggregate information, such as the number of enrolled students per course or per instructor.
+Sort data based on specific fields, such as sorting courses by the count of enrolled students in descending order.
 
 # Task 2 - Student Database Management System
 **Project Description**
