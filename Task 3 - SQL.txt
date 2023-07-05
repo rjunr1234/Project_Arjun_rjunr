@@ -1,0 +1,133 @@
+1) Create table for Events, Attendees and Registrations. Events table - Event_Id, Event_Name, Event_Date, Event_Location, Event_Description. Attendees table - Attendee_Id, Attendee_Name, Attendee_Phone, Attendee_Email, Attendee_City. Registration table - Registration_Id, Event_Id, Attendee_Id, Registration_Date, Registration_Amount. The FOREIGN KEY constraint in the Registration tables references Event_Id column in the Event table and the Attendee_Id references  column in the Attendees table
+
+-- Create Events table
+CREATE TABLE Events (
+  Event_Id SERIAL PRIMARY KEY,
+  Event_Name VARCHAR(255) NOT NULL,
+  Event_Date DATE NOT NULL,
+  Event_Location VARCHAR(255) NOT NULL,
+  Event_Description TEXT
+);
+
+-- Create Attendees table
+CREATE TABLE Attendees (
+  Attendee_Id SERIAL PRIMARY KEY,
+  Attendee_Name VARCHAR(255) NOT NULL,
+  Attendee_Phone VARCHAR(20) NOT NULL,
+  Attendee_Email VARCHAR(255) NOT NULL,
+  Attendee_City VARCHAR(255) NOT NULL
+);
+
+-- Create Registrations table
+CREATE TABLE Registrations (
+  Registration_Id SERIAL PRIMARY KEY,
+  Event_Id INT NOT NULL,
+  Attendee_Id INT NOT NULL,
+  Registration_Date DATE NOT NULL,
+  Registration_Amount NUMERIC(10, 2) NOT NULL,
+  FOREIGN KEY (Event_Id) REFERENCES Events (Event_Id),
+  FOREIGN KEY (Attendee_Id) REFERENCES Attendees (Attendee_Id)
+);
+
+
+2) Insert sample data for Events, Attendees and registration table with respective fields
+
+-- Insert sample data into Events table
+INSERT INTO Events (Event_Name, Event_Date, Event_Location, Event_Description)
+VALUES
+  ('Conference A', '2023-08-15', 'New York', 'Annual conference for professionals.'),
+  ('Workshop B', '2023-09-20', 'London', 'Hands-on workshop for beginners.'),
+  ('Seminar C', '2023-10-10', 'Paris', 'In-depth seminar on advanced topics.'),
+  ('Webinar D', '2023-08-30', 'Online', 'Online webinar for remote attendees.'),
+  ('Conference E', '2023-11-05', 'San Francisco', 'International conference on technology.'),
+  ('Workshop F', '2023-12-12', 'Berlin', 'Interactive workshop for advanced learners.'),
+  ('Seminar G', '2023-09-25', 'Tokyo', 'Specialized seminar for industry professionals.'),
+  ('Webinar H', '2023-10-18', 'Online', 'Virtual webinar on emerging trends.'),
+  ('Conference I', '2023-11-08', 'Sydney', 'Annual conference for business leaders.'),
+  ('Workshop J', '2023-12-05', 'Toronto', 'Hands-on workshop for creative professionals.');
+
+-- Insert sample data into Attendees table
+INSERT INTO Attendees (Attendee_Name, Attendee_Phone, Attendee_Email, Attendee_City)
+VALUES
+  ('John Smith', '1234567890', 'john@example.com', 'New York'),
+  ('Jane Doe', '9876543210', 'jane@example.com', 'London'),
+  ('Michael Johnson', '5555555555', 'michael@example.com', 'Los Angeles'),
+  ('Emily Wilson', '9999999999', 'emily@example.com', 'Toronto'),
+  ('David Brown', '1111111111', 'david@example.com', 'Sydney'),
+  ('Sophia Lee', '2222222222', 'sophia@example.com', 'Seoul'),
+  ('Daniel Taylor', '3333333333', 'daniel@example.com', 'Berlin'),
+  ('Olivia Clark', '4444444444', 'olivia@example.com', 'Paris'),
+  ('James Anderson', '6666666666', 'james@example.com', 'Tokyo'),
+  ('Emma Martinez', '7777777777', 'emma@example.com', 'Barcelona');
+
+-- Insert sample data into Registrations table
+INSERT INTO Registrations (Event_Id, Attendee_Id, Registration_Date, Registration_Amount)
+VALUES
+  (1, 1, '2023-07-01', 100.00),
+  (1, 2, '2023-07-02', 100.00),
+  (2, 3, '2023-07-03', 50.00),
+  (3, 4, '2023-07-04', 75.00),
+  (3, 5, '2023-07-05', 75.00),
+  (4, 6, '2023-07-06', 25.00),
+  (5, 7, '2023-07-07', 150.00),
+  (6, 8, '2023-07-08', 50.00),
+  (7, 9, '2023-07-09', 75.00),
+  (8, 10, '2023-07-10', 25.00);
+
+
+
+3) Inserting a new event, Updating a event's information, Deleting an event
+
+a) Inserting a new event:
+
+INSERT INTO Events (Event_Name, Event_Date, Event_Location, Event_Description)
+VALUES ('New Event', '2023-12-31', 'City', 'Description of the new event');
+
+
+b) Updating an event's information:
+
+UPDATE Events
+SET Event_Name = 'Updated Event Name', Event_Date = '2023-12-15', Event_Location = 'New Location', Event_Description = 'Updated event description'
+WHERE Event_Id = 1;
+
+
+c) Deleting an event:
+
+DELETE FROM Registrations WHERE Event_Id = 2;
+
+
+4) Inserting a new attendee and Registering an attendee for an event
+
+a) Inserting a new attendee:
+
+INSERT INTO Attendees (Attendee_Name, Attendee_Phone, Attendee_Email, Attendee_City)
+VALUES ('New Attendee', '1234567890', 'newattendee@example.com', 'City')
+RETURNING Attendee_Id;
+
+b) Registering an attendee for an event:
+
+INSERT INTO Registrations (Event_Id, Attendee_Id, Registration_Date, Registration_Amount)
+VALUES (1, 11, '2023-07-15', 50.00);
+
+
+5) Develop queries to retrieve event information, generate attendees lists, and calculate event attendance statistics
+
+
+-- Retrieve information for a specific event
+SELECT Event_Name, Event_Date, Event_Location, Event_Description
+FROM Events
+WHERE Event_Id = 1;
+
+
+-- Generate attendee list for a specific event
+SELECT A.Attendee_Id, A.Attendee_Name, A.Attendee_Phone, A.Attendee_Email, A.Attendee_City
+FROM Attendees A
+INNER JOIN Registrations R ON A.Attendee_Id = R.Attendee_Id
+WHERE R.Event_Id = 1;
+
+
+-- Calculate event attendance statistics
+SELECT E.Event_Id, E.Event_Name, COUNT(R.Attendee_Id) AS Attendance_Count
+FROM Events E
+LEFT JOIN Registrations R ON E.Event_Id = R.Event_Id
+GROUP BY E.Event_Id, E.Event_Name;

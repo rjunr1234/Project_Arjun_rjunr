@@ -1,0 +1,77 @@
+1) Create a table called "student_table"  with the following  columns: Student_id (Integer), stu_name(text), Department(text), email_id(text), Phone_no(numeric), Address(text), Date_of_birth (date), Gender(text), Major(text), GPA(numeric), Grade(text) should be A,B,C etc.
+
+CREATE TABLE student_table (
+    Student_id INTEGER,
+    stu_name TEXT,
+    Department TEXT,
+    email_id TEXT,
+    Phone_no NUMERIC,
+    Address TEXT,
+    Date_of_birth DATE,
+    Gender TEXT,
+    Major TEXT,
+    GPA NUMERIC,
+    Grade TEXT
+);
+
+2) Insert sample records into the "student_table"  using INSERT command
+
+INSERT INTO student_table (Student_id, stu_name, Department, email_id, Phone_no, Address, Date_of_birth, Gender, Major, GPA, Grade)
+VALUES
+    (1, 'John Doe', 'Computer Science', 'johndoe@example.com', 1234567890, '123 Main St', '1999-05-15', 'Male', 'Software Engineering', 3.8, 'A'),
+    (2, 'Jane Smith', 'Mathematics', 'janesmith@example.com', 9876543210, '456 Elm St', '2000-09-21', 'Female', 'Applied Mathematics', 3.6, 'A-'),
+    (3, 'Michael Johnson', 'Physics', 'michaeljohnson@example.com', 5555555555, '789 Oak St', '1998-07-10', 'Male', 'Astrophysics', 3.9, 'A+'),
+    (4, 'Emily Davis', 'English Literature', 'emilydavis@example.com', 4444444444, '567 Pine St', '2001-02-03', 'Female', 'American Literature', 3.5, 'B+'),
+    (5, 'Robert Wilson', 'History', 'robertwilson@example.com', 2222222222, '890 Maple St', '1997-11-28', 'Male', 'World History', 3.7, 'A-'),
+    (6, 'Sarah Anderson', 'Chemistry', 'sarahanderson@example.com', 7777777777, '321 Oak St', '2002-04-15', 'Female', 'Organic Chemistry', 3.4, 'B'),
+    (7, 'David Lee', 'Business Administration', 'davidlee@example.com', 9999999999, '456 Elm St', '1999-08-25', 'Male', 'Finance', 3.6, 'A-'),
+    (8, 'Emma Martinez', 'Psychology', 'emmamartinez@example.com', 6666666666, '987 Pine St', '1998-03-12', 'Female', 'Cognitive Psychology', 3.3, 'B-'),
+    (9, 'Daniel Harris', 'Biology', 'danielharris@example.com', 1111111111, '234 Maple St', '2000-10-05', 'Male', 'Genetics', 3.8, 'A'),
+    (10, 'Sophia Brown', 'Art', 'sophiabrown@example.com', 8888888888, '567 Oak St', '1999-12-01', 'Female', 'Painting', 3.2, 'B-');
+
+3)Develop a query to retrieve all students information from the student_table and sort them in  descending order by their grade using PostgreSQL
+
+SELECT *
+FROM student_table
+ORDER BY Grade DESC;
+
+4) Implement a query to retrieve information about all male students from the student_table
+SELECT *
+FROM student_table
+WHERE Gender = 'Male';
+
+
+5) Create a query to fetch  the details of students who have a GPA less than 5.0  from the student_table
+SELECT *
+FROM student_table
+WHERE GPA < 5.0;
+
+
+6) write an update statement to modify the email and grade of a student with a specific ID in the "student_table"
+UPDATE student_table
+SET email_id = 'newemail@example.com', Grade = 'A+'
+WHERE Student_id = 1;
+SELECT *
+FROM student_table
+
+7) Develop a query to retrieve the names and ages of all students who have a grade of "B" from the "student_table"
+SELECT stu_name, DATE_PART('year', AGE(current_date, Date_of_birth)) AS age
+FROM student_table
+WHERE Grade = 'B';
+
+
+8) Create a query to group the "student_table" by the "Department" and "Gender" columns and calculate the average GPA for each combination
+SELECT Department, Gender, AVG(GPA) AS Average_GPA
+FROM student_table
+GROUP BY Department, Gender;
+
+
+9) Rename the "student_table" to "student_info" using the appropriate SQL statement
+ALTER TABLE student_table RENAME TO student_info;
+
+
+10) Write a query to retrieve the name of the student with the highest GPA from the "student_info" table
+SELECT stu_name
+FROM student_info
+ORDER BY GPA DESC
+LIMIT 1;

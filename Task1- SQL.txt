@@ -1,0 +1,188 @@
+Create the StudentInfo table with columns STU_ID, STU_NAME,DOB, PHONE_NO, EMAIL_ID, ADDRESS
+
+CREATE TABLE StudentInfo (
+    STU_ID INT PRIMARY KEY,
+    STU_NAME VARCHAR(100),
+    DOB DATE,
+    PHONE_NO VARCHAR(20),
+    EMAIL_ID VARCHAR(100),
+    ADDRESS VARCHAR(200)
+);
+
+Create the CoursesInfo table with columns COURSE_ID, COURSE_NAME,COURSE_INSTRUCTOR NAME
+
+CREATE TABLE CoursesInfo (
+    COURSE_ID INT PRIMARY KEY,
+    COURSE_NAME VARCHAR(100),
+    COURSE_INSTRUCTOR_NAME VARCHAR(100)
+);
+
+Create the EnrollmentInfo with columns ENROLLMENT_ID, STU_ID, COURSE_ID, ENROLL_STATUS(Enrolled/Not Enrolled). The Foreign Key constraint in the EnrollmentInfo table references the STU_ID column in the StudentInfo table and the COURSE_ID column in the CourseInfo table
+
+CREATE TABLE EnrollmentInfo (
+    ENROLLMENT_ID INT PRIMARY KEY,
+    STU_ID INT,
+    COURSE_ID INT,
+    ENROLL_STATUS VARCHAR(20),
+    FOREIGN KEY (STU_ID) REFERENCES StudentInfo(STU_ID),
+    FOREIGN KEY (COURSE_ID) REFERENCES CoursesInfo(COURSE_ID)
+);
+
+Insert some sample data for StudentInfo table, CoursesInfo table, EnrollmentInfo with respective fields
+
+INSERT INTO StudentInfo (STU_ID, STU_NAME, DOB, PHONE_NO, EMAIL_ID, ADDRESS) 
+VALUES
+    (1, 'John Doe', '1999-05-15', '1234567890', 'johndoe@example.com', '123 Main St'),
+    (2, 'Jane Smith', '2000-09-21', '9876543210', 'janesmith@example.com', '456 Elm St'),
+    (3, 'Michael Johnson', '1998-07-10', '5555555555', 'michaeljohnson@example.com', '789 Oak St'),
+    (4, 'Emily Davis', '2001-02-03', '4444444444', 'emilydavis@example.com', '567 Pine St'),
+    (5, 'Robert Wilson', '1997-11-28', '2222222222', 'robertwilson@example.com', '890 Maple St');
+
+INSERT INTO CoursesInfo (COURSE_ID, COURSE_NAME, COURSE_INSTRUCTOR_NAME)
+VALUES
+    (1, 'Mathematics', 'Professor Smith'),
+    (2, 'English Literature', 'Professor Johnson'),
+    (3, 'Physics', 'Professor Williams'),
+    (4, 'History', 'Professor Brown'),
+    (5, 'Computer Science', 'Professor Davis');
+
+INSERT INTO EnrollmentInfo (ENROLLMENT_ID, STU_ID, COURSE_ID, ENROLL_STATUS)
+VALUES
+    (1, 1, 3, 'Enrolled'),
+    (2, 2, 1, 'Enrolled'),
+    (3, 3, 2, 'Not Enrolled'),
+    (4, 4, 4, 'Enrolled'),
+    (5, 5, 5, 'Not Enrolled'),
+    (6, 1, 1, 'Enrolled');
+
+
+write a query to retrieve student details, such as student name, contact informations and Enrollment status
+
+SELECT
+    si.STU_NAME,
+    si.PHONE_NO,
+    si.EMAIL_ID,
+    si.ADDRESS,
+    ei.ENROLL_STATUS
+FROM
+    StudentInfo si
+JOIN
+    EnrollmentInfo ei ON si.STU_ID = ei.STU_ID;
+
+write a query to retrieve a list of courses in which specific student is enrolled
+
+SELECT
+    ci.COURSE_NAME
+FROM
+    CoursesInfo ci
+JOIN
+    EnrollmentInfo ei ON ci.COURSE_ID = ei.COURSE_ID
+JOIN
+    StudentInfo si ON ei.STU_ID = si.STU_ID
+WHERE
+    si.STU_NAME = 'John Doe';
+
+
+
+write a query to retrieve course information, including course name, intsructor information
+
+SELECT
+    COURSE_NAME,
+    COURSE_INSTRUCTOR_NAME
+FROM
+    CoursesInfo;
+
+
+
+write a query to retrieve course information for a specific course
+
+SELECT
+    COURSE_NAME,
+    COURSE_INSTRUCTOR_NAME
+FROM
+    CoursesInfo
+WHERE
+    COURSE_NAME = 'Mathematics';
+
+
+write a query to retrieve course information for multiple courses
+SELECT
+    COURSE_NAME,
+    COURSE_INSTRUCTOR_NAME
+FROM
+    CoursesInfo
+WHERE
+    COURSE_NAME IN ('Mathematics', 'Physics', 'Computer Science');
+
+
+
+a) write a query to retrieve the number of students enrolled in each course
+SELECT
+    ci.COURSE_NAME,
+    COUNT(ei.STU_ID) AS Enrolled_Students
+FROM
+    CoursesInfo ci
+JOIN
+    EnrollmentInfo ei ON ci.COURSE_ID = ei.COURSE_ID
+GROUP BY
+    ci.COURSE_NAME;
+
+
+b) write a query to retrieve the list of students enrolled in a specific course
+SELECT
+    si.STU_ID,
+    si.STU_NAME,
+    si.PHONE_NO,
+    si.EMAIL_ID,
+    si.ADDRESS
+FROM
+    StudentInfo si
+JOIN
+    EnrollmentInfo ei ON si.STU_ID = ei.STU_ID
+JOIN
+    CoursesInfo ci ON ei.COURSE_ID = ci.COURSE_ID
+WHERE
+    ci.COURSE_NAME = 'Mathematics';
+
+
+c) write a query to retrieve the count of enrolled students for each instructor
+SELECT
+    ci.COURSE_INSTRUCTOR_NAME,
+    COUNT(ei.STU_ID) AS Enrolled_Students_Count
+FROM
+    CoursesInfo ci
+JOIN
+    EnrollmentInfo ei ON ci.COURSE_ID = ei.COURSE_ID
+GROUP BY
+    ci.COURSE_INSTRUCTOR_NAME;
+
+
+
+d) write a query to retrieve the list of students who are enrolled in multiple course
+
+SELECT
+    si.STU_ID,
+    si.STU_NAME
+FROM
+    StudentInfo si
+JOIN
+    EnrollmentInfo ei ON si.STU_ID = ei.STU_ID
+GROUP BY
+    si.STU_ID, si.STU_NAME
+HAVING
+    COUNT(DISTINCT ei.COURSE_ID) > 1;
+
+
+
+e) write a query to retrieve the courses that have the highest number of enrolled students (arranging from highest to lowest)
+SELECT
+    ci.COURSE_NAME,
+    COUNT(ei.STU_ID) AS Enrolled_Students_Count
+FROM
+    CoursesInfo ci
+JOIN
+    EnrollmentInfo ei ON ci.COURSE_ID = ei.COURSE_ID
+GROUP BY
+    ci.COURSE_NAME
+ORDER BY
+    Enrolled_Students_Count DESC;
